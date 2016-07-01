@@ -12,6 +12,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
+import com.alibaba.fastjson.JSON;
 import com.solar.annotation.AnnotationExtracter;
 import com.solar.annotation.AnnotationField;
 
@@ -29,7 +30,7 @@ public class LuceneWriter {
         this.analyzer = analyzer;
     }
 
-    public void createIndex() throws IOException {
+    public void createIndex(AnnotationExtracter extracter) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
         IndexWriter writer = new IndexWriter(directory, config);
         Document doc = new Document();
@@ -51,7 +52,7 @@ public class LuceneWriter {
         List<AnnotationField> annotationFields = extracter.getAnnotatedFields();
         for (AnnotationField annotationField : annotationFields) {
             document.add(new Field(annotationField.getFieldName(),
-                annotationField.getFieldValue().toString(), TextField.TYPE_STORED));
+                JSON.toJSONString(annotationField.getFieldValue()), TextField.TYPE_STORED));
         }
         return document;
     }
