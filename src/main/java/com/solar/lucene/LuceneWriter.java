@@ -1,6 +1,7 @@
 package com.solar.lucene;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -10,6 +11,9 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
+
+import com.solar.annotation.AnnotationExtracter;
+import com.solar.annotation.AnnotationField;
 
 public class LuceneWriter {
 
@@ -33,5 +37,22 @@ public class LuceneWriter {
         doc.add(new Field("fileName", text, TextField.TYPE_STORED));
         writer.addDocument(doc);
         writer.close();
+    }
+
+    /**
+     * 解析数据生成document文件，注意以后再做自定义document
+     * @author xiaojie
+     * 2016年7月1日 下午4:11:53
+     * @param extracter
+     * @return
+     */
+    public Document getLuceneDocument(AnnotationExtracter extracter) {
+        Document document = new Document();
+        List<AnnotationField> annotationFields = extracter.getAnnotatedFields();
+        for (AnnotationField annotationField : annotationFields) {
+            document.add(new Field(annotationField.getFieldName(),
+                annotationField.getFieldValue().toString(), TextField.TYPE_STORED));
+        }
+        return document;
     }
 }
