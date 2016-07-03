@@ -33,10 +33,12 @@ public class LuceneWriter {
     public void createIndex(AnnotationExtracter extracter) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
         IndexWriter writer = new IndexWriter(directory, config);
-        Document doc = new Document();
-        String text = "this is lucene test";
-        doc.add(new Field("fileName", text, TextField.TYPE_STORED));
-        writer.addDocument(doc);
+//        Document doc = new Document();
+//        String text = "this is lucene test";
+//        doc.add(new Field("fileName", text, TextField.TYPE_STORED));
+//        writer.addDocument(doc);
+        Document doc = getLuceneDocument(extracter);
+        writer.updateDocument(null, doc);
         writer.close();
     }
 
