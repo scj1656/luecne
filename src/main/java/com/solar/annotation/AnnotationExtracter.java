@@ -40,6 +40,10 @@ public class AnnotationExtracter {
             String fieldName = descriptor.getName();
             Field field = ReflectionUtils.getDeclaredField(obj, fieldName);
 
+            if (field == null) {
+                continue;
+            }
+
             Method method = descriptor.getReadMethod();
 
             method.setAccessible(true);
