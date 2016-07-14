@@ -11,6 +11,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -18,6 +19,7 @@ import org.apache.lucene.util.Version;
 import com.alibaba.fastjson.JSON;
 import com.solar.annotation.AnnotationExtracter;
 import com.solar.annotation.AnnotationField;
+import com.solar.constants.FieldConstants;
 import com.solar.model.SkuIndex;
 
 public class LuceneWriter {
@@ -34,15 +36,17 @@ public class LuceneWriter {
         this.analyzer = analyzer;
     }
 
-    public void createIndex(AnnotationExtracter extracter) throws IOException {
+    private void createIndex(AnnotationExtracter extracter) throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
         IndexWriter writer = new IndexWriter(directory, config);
-        //        Document doc = new Document();
-        //        String text = "this is lucene test";
-        //        doc.add(new Field("fileName", text, TextField.TYPE_STORED));
-        //        writer.addDocument(doc);
         Document doc = getLuceneDocument(extracter);
-        writer.updateDocument(null, doc);
+        if (doc.getField(FieldConstants.FIELD_ID) != null) {
+            Term term = new Term(FieldConstants.FIELD_ID,
+                doc.getField(FieldConstants.FIELD_ID).stringValue());
+            writer.updateDocument(term, doc);
+        } else {
+            writer.addDocument(doc);
+        }
         writer.close();
     }
 
@@ -64,7 +68,7 @@ public class LuceneWriter {
     }
 
     public static void main(String[] args) {
-        SkuIndex sku = new SkuIndex("test", "dioa");
+        SkuIndex sku = new SkuIndex(1, "test", "dioa");
         Directory directory;
         try {
             directory = FSDirectory.open(new File("/Users/mac/index"));
