@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface solarHandler {
+public @interface SolarHandler {
 	String value() default "";
 }

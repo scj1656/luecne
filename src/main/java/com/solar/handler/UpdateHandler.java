@@ -1,13 +1,18 @@
 package com.solar.handler;
 
-import com.solar.annotation.solarHandler;
-import com.solar.protocol.SolarRequest;
+import com.solar.annotation.SolarHandler;
+import com.solar.protocol.UpdateRequest;
+import com.solar.protocol.UpdateResponse;
 
-@solarHandler(value = "updateHandler")
-public class UpdateHandler implements Handler {
+@SolarHandler(value = "updateHandler")
+public class UpdateHandler extends RequestHandler {
 
-    public void handler(SolarRequest solarRequest) {
+    public void handler(UpdateRequest updateRequest, UpdateResponse updateResponse) {
         System.out.println("this is updateHandler");
+    }
+
+    public String getName() {
+        return null;
     }
 
 }

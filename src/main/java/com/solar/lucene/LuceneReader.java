@@ -21,7 +21,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import com.solar.protocol.SearchQuery;
+import com.solar.protocol.SearchRequest;
 
 public class LuceneReader {
 
@@ -34,10 +34,10 @@ public class LuceneReader {
         this.analyzer = analyzer;
     }
 
-    public void read(SearchQuery searchQuery) throws IOException, ParseException {
+    public void read(SearchRequest searchRequest) throws IOException, ParseException {
         DirectoryReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
-        Query query = buildQuery(searchQuery);
+        Query query = buildQuery(searchRequest);
         ScoreDoc[] scoreDocs = searcher.search(query, null, 1000).scoreDocs;
         for (ScoreDoc scoreDoc : scoreDocs) {
             Document document = searcher.doc(scoreDoc.doc);
@@ -51,8 +51,8 @@ public class LuceneReader {
         directory.close();
     }
 
-    private Query buildQuery(SearchQuery searchQuery) {
-        Map<String, String> querys = searchQuery.getQuery();
+    private Query buildQuery(SearchRequest searchRequest) {
+        Map<String, String> querys = searchRequest.getQuery();
         Query query = null;
         for (Entry<String, String> entry : querys.entrySet()) {
             String field = entry.getKey();
@@ -72,12 +72,12 @@ public class LuceneReader {
         try {
             Map<String, String> queryMap = new HashMap<String, String>();
             queryMap.put("brand", "dioa");
-            SearchQuery searchQuery = new SearchQuery();
-            searchQuery.setQuery(queryMap);
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.setQuery(queryMap);
             Directory directory = FSDirectory.open(new File("/Users/mac/index"));
             Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
             LuceneReader reader = new LuceneReader(directory, analyzer);
-            reader.read(searchQuery);
+            reader.read(searchRequest);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } catch (ParseException e) {
