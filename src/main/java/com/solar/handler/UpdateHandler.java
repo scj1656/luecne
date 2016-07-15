@@ -8,7 +8,7 @@ import com.solar.protocol.UpdateResponse;
 public class UpdateHandler extends RequestHandler {
 
     public void handler(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        System.out.println("this is updateHandler");
+
     }
 
     public String getName() {
