@@ -1,18 +1,25 @@
 package com.solar.handler;
 
-import com.solar.annotation.SolarHandler;
+import com.solar.lucene.SolarWriter;
+import com.solar.protocol.SolarRequest;
+import com.solar.protocol.SolarResponse;
 import com.solar.protocol.UpdateRequest;
-import com.solar.protocol.UpdateResponse;
 
-@SolarHandler(value = "updateHandler")
 public class UpdateHandler extends RequestHandler {
 
-    public void handler(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+    private static final String UPDATE_HANDLER = "update";
 
-    }
+    private SolarWriter         solarWriter;
 
     public String getName() {
-        return null;
+        return UPDATE_HANDLER;
+    }
+
+    @Override
+    public void handler(SolarRequest solarRequest, SolarResponse solarResponse) {
+        UpdateRequest updateRequest = (UpdateRequest) solarRequest;
+        //        solarWriter = new LuceneWriter(directory, updateRequest.get)
+
     }
 
 }

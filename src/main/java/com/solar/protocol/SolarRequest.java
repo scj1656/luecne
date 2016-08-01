@@ -1,11 +1,25 @@
 package com.solar.protocol;
 
-public abstract class SolarRequest {
+public class SolarRequest {
 
-    protected String name;
+    private String analyzerName;
 
-    protected abstract String getName();
+    private String handlerName;
 
-    protected abstract void setName(String name);
+    public String getAnalyzerName() {
+        return analyzerName;
+    }
+
+    public void setAnalyzerName(String analyzerName) {
+        this.analyzerName = analyzerName;
+    }
+
+    public String getHandlerName() {
+        return handlerName;
+    }
+
+    public void setHandlerName(String handlerName) {
+        this.handlerName = handlerName;
+    }
 
 }

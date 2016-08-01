@@ -11,10 +11,6 @@ public class SearchRequest extends SolarRequest {
 
     }
 
-    public SearchRequest(String name) {
-        setName(name);
-    }
-
     public Map<String, String> getQuery() {
         return query;
     }
@@ -23,13 +19,4 @@ public class SearchRequest extends SolarRequest {
         this.query = query;
     }
 
-    @Override
-    protected String getName() {
-        return name;
-    }
-
-    @Override
-    protected void setName(String name) {
-        super.name = name;
-    }
 }

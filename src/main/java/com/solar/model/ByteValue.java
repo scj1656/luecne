@@ -1,6 +1,8 @@
-package com.solar.util;
+package com.solar.model;
 
 import java.util.Arrays;
+
+import com.solar.util.ByteUtil;
 
 public class ByteValue {
 

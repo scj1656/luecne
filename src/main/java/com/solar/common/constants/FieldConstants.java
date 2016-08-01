@@ -1,4 +1,4 @@
-package com.solar.constants;
+package com.solar.common.constants;
 
 public class FieldConstants {
 

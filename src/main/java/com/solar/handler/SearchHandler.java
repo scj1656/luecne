@@ -2,16 +2,19 @@ package com.solar.handler;
 
 import com.solar.annotation.SolarHandler;
 import com.solar.protocol.SolarRequest;
+import com.solar.protocol.SolarResponse;
 
 @SolarHandler
 public class SearchHandler extends RequestHandler {
 
-    public void handler(SolarRequest solarRequest) {
-        System.out.println("this is searchHandler");
-    }
+    private static final String SEARCH_NANDLER = "search";
 
     public String getName() {
-        return null;
+        return SEARCH_NANDLER;
+    }
+
+    @Override
+    public void handler(SolarRequest solarRequest, SolarResponse solarResponse) {
     }
 
 }

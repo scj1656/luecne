@@ -56,4 +56,5 @@ public class BeanFactory {
     public void setBeanMap(Map<String, SolarBean> beanMap) {
         this.beanMap = beanMap;
     }
+
 }

@@ -1,16 +1,39 @@
 package com.solar.protocol;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.solar.annotation.AnnotationExtracter;
+import com.solar.annotation.AnnotationField;
+import com.solar.model.SolarDocument;
+
 public class UpdateRequest extends SolarRequest {
 
-    //List<Data>,能把不同的对象都可以存储在里面
+    private List<SolarDocument> solarDocuments;
 
-    @Override
-    protected String getName() {
-        return null;
+    public void importData(List<?> importData) {
+        if (importData == null || importData.size() == 0) {
+            return;
+        }
+        for (Object obj : importData) {
+            AnnotationExtracter extracter = new AnnotationExtracter(obj);
+            List<AnnotationField> annoFields = extracter.getAnnotatedFields();
+            if (annoFields.isEmpty()) {
+                continue;
+            }
+            SolarDocument solarDocument = new SolarDocument();
+            for (AnnotationField autoField : annoFields) {
+                solarDocument.setField(autoField.getFieldName(), autoField.getFieldValue());
+            }
+            solarDocuments.add(solarDocument);
+        }
     }
 
-    @Override
-    protected void setName(String name) {
+    public List<SolarDocument> exportData() {
+        if (solarDocuments == null) {
+            solarDocuments = new ArrayList<SolarDocument>();
+        }
+        return solarDocuments;
     }
 
 }
