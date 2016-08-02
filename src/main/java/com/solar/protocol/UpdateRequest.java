@@ -11,6 +11,10 @@ public class UpdateRequest extends SolarRequest {
 
     private List<SolarDocument> solarDocuments;
 
+    public UpdateRequest() {
+        solarDocuments = new ArrayList<SolarDocument>();
+    }
+
     public void importData(List<?> importData) {
         if (importData == null || importData.size() == 0) {
             return;
@@ -30,9 +34,6 @@ public class UpdateRequest extends SolarRequest {
     }
 
     public List<SolarDocument> exportData() {
-        if (solarDocuments == null) {
-            solarDocuments = new ArrayList<SolarDocument>();
-        }
         return solarDocuments;
     }
 

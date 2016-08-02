@@ -9,6 +9,10 @@ public class SolarDocument {
 
     private List<SolarField>    fields;
 
+    public SolarDocument() {
+        fields = new ArrayList<SolarField>();
+    }
+
     public void setField(String fieldName, Object value) {
         IndexType indexType = null;
         if (ID.equals(fieldName)) {
@@ -20,9 +24,6 @@ public class SolarDocument {
     }
 
     public List<SolarField> getField() {
-        if (fields == null) {
-            fields = new ArrayList<SolarField>();
-        }
         return fields;
     }
 }

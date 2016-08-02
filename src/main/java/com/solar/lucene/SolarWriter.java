@@ -10,4 +10,6 @@ public interface SolarWriter {
 
     void deleteDocument(SolarDocument doc);
 
+    void commit();
+
 }

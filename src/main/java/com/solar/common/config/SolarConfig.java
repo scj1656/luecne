@@ -46,9 +46,13 @@ public class SolarConfig {
 
         this.name = document.selectSingleNode("solar/core/name").getText();
         this.version = document.selectSingleNode("solar/core/version").getText();
-        this.indexDir = document.selectSingleNode("solar/code/index/dir").getText();
-        this.type = document.selectSingleNode("solar/code/index/type").getText();
-        this.openMode = document.selectSingleNode("solar/code/index/openmode").getText();
+        this.indexDir = document.selectSingleNode("solar/core/index/dir").getText();
+        this.type = document.selectSingleNode("solar/core/index/type").getText();
+        this.openMode = document.selectSingleNode("solar/core/index/openmode").getText();
+    }
+
+    public static void main(String[] args) {
+        SolarConfig config = SolarConfig.DEFAULT;
     }
 
     public Document getDocument() {

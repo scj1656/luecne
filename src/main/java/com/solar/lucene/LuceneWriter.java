@@ -50,7 +50,7 @@ public class LuceneWriter implements SolarWriter {
     }
 
     private IndexWriter createIndexWriter(Directory directory, Analyzer analyzer) {
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_46, analyzer);
         config.setOpenMode(OpenMode.CREATE_OR_APPEND);//默认是这个
         try {
             if (IndexWriter.isLocked(directory)) {
@@ -162,7 +162,7 @@ public class LuceneWriter implements SolarWriter {
     }
 
     private void createIndex(AnnotationExtracter extracter) throws IOException {
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_46, analyzer);
         IndexWriter writer = new IndexWriter(directory, config);
         Document doc = getLuceneDocument(extracter);
         if (doc.getField(FieldConstants.FIELD_ID) != null) {
@@ -197,11 +197,19 @@ public class LuceneWriter implements SolarWriter {
         Directory directory;
         try {
             directory = FSDirectory.open(new File("/Users/mac/index"));
-            Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+            Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_46);
             LuceneWriter writer = new LuceneWriter(directory, analyzer);
             writer.createIndex(new AnnotationExtracter(sku));
         } catch (IOException e) {
             System.out.println(e);
+        }
+    }
+
+    public void commit() {
+        try {
+            indexWriter.commit();
+        } catch (IOException e) {
+            logger.error("", e);
         }
     }
 

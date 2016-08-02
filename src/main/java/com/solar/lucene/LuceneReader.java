@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexableField;
@@ -22,6 +21,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import com.solar.protocol.SearchRequest;
+
+import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
 public class LuceneReader {
 
@@ -57,7 +58,7 @@ public class LuceneReader {
         for (Entry<String, String> entry : querys.entrySet()) {
             String field = entry.getKey();
             String value = entry.getValue();
-            QueryParser parser = new QueryParser(Version.LUCENE_CURRENT, field, analyzer);
+            QueryParser parser = new QueryParser(Version.LUCENE_46, field, analyzer);
             try {
                 query = parser.parse(value);
             } catch (ParseException e) {
@@ -71,11 +72,11 @@ public class LuceneReader {
     public static void main(String[] args) {
         try {
             Map<String, String> queryMap = new HashMap<String, String>();
-            queryMap.put("brand", "dioa");
+            queryMap.put("name", "123");
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.setQuery(queryMap);
             Directory directory = FSDirectory.open(new File("/Users/mac/index"));
-            Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+            Analyzer analyzer = new PaodingAnalyzer();
             LuceneReader reader = new LuceneReader(directory, analyzer);
             reader.read(searchRequest);
         } catch (IOException e) {
