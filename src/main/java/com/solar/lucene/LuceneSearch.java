@@ -13,26 +13,53 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solar.protocol.SearchRequest;
 
 import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
-public class LuceneReader {
+public class LuceneSearch implements SolarSearch {
 
-    private Directory directory;
+    private static final Logger logger = LoggerFactory.getLogger(LuceneSearch.class);
 
-    private Analyzer  analyzer;
+    private Directory           directory;
 
-    public LuceneReader(Directory directory, Analyzer analyzer) {
+    private Analyzer            analyzer;
+
+    private IndexSearcher       searcher;
+
+    public LuceneSearch(Directory directory) {
+        this.directory = directory;
+        DirectoryReader reader = null;
+        try {
+            reader = DirectoryReader.open(directory);
+        } catch (IOException e) {
+            logger.error("", e);
+        }
+        this.searcher = new IndexSearcher(reader);
+    }
+
+    //之后废弃
+    public LuceneSearch(Directory directory, Analyzer analyzer) {
         this.directory = directory;
         this.analyzer = analyzer;
+        DirectoryReader reader = null;
+        try {
+            reader = DirectoryReader.open(directory);
+        } catch (IOException e) {
+            logger.error("", e);
+        }
+        this.searcher = new IndexSearcher(reader);
     }
 
     public void read(SearchRequest searchRequest) throws IOException, ParseException {
@@ -77,12 +104,47 @@ public class LuceneReader {
             searchRequest.setQuery(queryMap);
             Directory directory = FSDirectory.open(new File("/Users/mac/index"));
             Analyzer analyzer = new PaodingAnalyzer();
-            LuceneReader reader = new LuceneReader(directory, analyzer);
+            LuceneSearch reader = new LuceneSearch(directory, analyzer);
             reader.read(searchRequest);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public TopDocs search(Query query, int maxHitsPerSearch) {
+        TopDocs result = null;
+        try {
+            result = searcher.search(query, maxHitsPerSearch);
+        } catch (IOException e) {
+            logger.error("", e);
+        }
+        for (ScoreDoc scoreDoc : result.scoreDocs) {
+            Document document = null;
+            try {
+                document = searcher.doc(scoreDoc.doc);
+            } catch (IOException e) {
+                logger.error("", e);
+            }
+            if (document != null) {
+                List<IndexableField> fields = document.getFields();
+                for (IndexableField indexableField : fields) {
+                    System.out
+                        .println(indexableField.name() + " value：" + indexableField.stringValue());
+                }
+            }
+        }
+        return result;
+    }
+
+    public TopDocs search(Query query, Filter filter, int maxHitsPerSearch) {
+        TopDocs result = null;
+        try {
+            result = searcher.search(query, filter, maxHitsPerSearch);
+        } catch (IOException e) {
+            logger.error("", e);
+        }
+        return result;
     }
 }
